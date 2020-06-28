@@ -1,0 +1,53 @@
+import clientes.*
+import geografia.*
+import vendedores.*
+import centros.*
+
+
+test "test de vendedores" {
+	const buenosAires = new Provincia(poblacion = 6000000)
+	const santaFe = new Provincia(poblacion = 6000000)
+	const cordoba = new Provincia(poblacion = 6000000)
+	const entreRios = new Provincia(poblacion = 6000000)
+
+	const chivilcoy = new Ciudad(provincia = buenosAires) 
+	const lobos = new Ciudad(provincia = buenosAires) 
+	const bragado = new Ciudad(provincia = buenosAires) 
+	const pergamino = new Ciudad(provincia = buenosAires) 
+	const zarate = new Ciudad(provincia = buenosAires) 
+	const rosario = new Ciudad(provincia = santaFe) 
+	const rafaela = new Ciudad(provincia = santaFe) 
+	const sanFrancisco = new Ciudad(provincia = cordoba) 
+	const diamante = new Ciudad(provincia = entreRios) 
+	const amstrong = new Ciudad(provincia = santaFe) 
+
+	const roberto = new Fijo(ciudadResidencia = zarate)
+	const negocio1 = new ComercioCorresponsal(ciudadSucursales = [lobos,bragado,pergamino,zarate,chivilcoy])
+	const negocio2 = new ComercioCorresponsal(ciudadSucursales = [rosario,rafaela,sanFrancisco,diamante])
+	const negocio3 = new ComercioCorresponsal(ciudadSucursales = [rosario,rafaela,amstrong,diamante])
+	const viajante1  = new Viajante(provinciasHabilitadas = [buenosAires])
+	const viajante2  = new Viajante(provinciasHabilitadas = [buenosAires, cordoba, santaFe])
+	assert.that(true)
+
+	//vendedor fijo
+	assert.notThat(roberto.puedeTrabajarEn(rosario))
+	assert.that(roberto.puedeTrabajarEn(zarate))
+	assert.notThat(roberto.esInfluyente())
+
+	//viajante
+	assert.notThat(viajante1.puedeTrabajarEn(rosario))
+ 	assert.that(viajante1.puedeTrabajarEn(zarate))
+	assert.notThat(viajante1.esInfluyente())
+	assert.that(viajante2.esInfluyente())
+	
+	//negocio
+	assert.that(negocio1.esInfluyente())
+	assert.that(negocio2.esInfluyente())
+	assert.notThat(negocio3.esInfluyente())
+	assert.that(negocio1.puedeTrabajarEn(zarate))
+	assert.notThat(negocio1.puedeTrabajarEn(rosario))
+	
+	//ComercioCorresponsal
+	assert.that(negocio1.puedeTrabajarEn(lobos))
+	assert.notThat(negocio1.puedeTrabajarEn(rosario))
+}

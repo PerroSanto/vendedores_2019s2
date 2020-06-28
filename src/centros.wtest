@@ -1,0 +1,66 @@
+import clientes.*
+import geografia.*
+import vendedores.*
+import centros.*
+
+test "test de centros" {
+	//provincias
+	const buenosAires = new Provincia(poblacion = 6000000)
+	const santaFe = new Provincia(poblacion = 6000000)
+	const cordoba = new Provincia(poblacion = 6000000)
+	const entreRios = new Provincia(poblacion = 6000000)
+	
+	//ciudades
+	const chivilcoy = new Ciudad(provincia = buenosAires) 
+	const lobos = new Ciudad(provincia = buenosAires) 
+	const bragado = new Ciudad(provincia = buenosAires) 
+	const pergamino = new Ciudad(provincia = buenosAires) 
+	const zarate = new Ciudad(provincia = buenosAires) 
+	const rosario = new Ciudad(provincia = santaFe) 
+	const rafaela = new Ciudad(provincia = santaFe) 
+	const diamante = new Ciudad(provincia = entreRios) 
+	const amstrong = new Ciudad(provincia = santaFe) 
+	
+	//certificaciones
+	const cert1 = new Certificaciones(puntos = 10, esCertificacionDeProductos = false)
+	const cert2 = new Certificaciones(puntos = 10, esCertificacionDeProductos = false)
+	const cert3 = new Certificaciones(puntos = 10, esCertificacionDeProductos = false)
+	const cert5 = new Certificaciones(puntos = 10)
+	const cert6 = new Certificaciones(puntos = 10)
+	const cert7 = new Certificaciones(puntos = 10)
+
+	//vendedores
+	const negocio1 = new ComercioCorresponsal(ciudadSucursales = [lobos,bragado,pergamino,zarate,chivilcoy])
+	const negocio3 = new ComercioCorresponsal(ciudadSucursales = [rosario,rafaela,amstrong,diamante])
+	const viajante1  = new Viajante(provinciasHabilitadas = [buenosAires])
+	const viajante2  = new Viajante(provinciasHabilitadas = [buenosAires, cordoba, santaFe])
+	const martin = new Viajante(certificaciones = [cert1,cert2,cert3,cert5,cert6,cert7],provinciasHabilitadas = [buenosAires])
+	const centro1 = new Centro(ciudad = lobos)
+
+	assert.that(martin.esVersatil())
+	assert.notThat(negocio3.esVersatil())
+	assert.that(martin.afinidad(centro1))
+	assert.notThat(negocio3.afinidad(centro1))
+	
+	//agregamos vendedor al centro1
+	centro1.agregarVendedor(martin)
+	
+	assert.that(centro1.puedeCubrir(zarate))
+	assert.notThat(centro1.puedeCubrir(rosario))
+	assert.notThat(centro1.esRobusto())
+	
+	//agregamos vendedores al centro1
+	centro1.agregarVendedor(viajante1)
+	centro1.agregarVendedor(viajante2)
+	
+	//repartimos certificaciones
+	centro1.repartirCertificacion(cert1)
+	centro1.repartirCertificacion(cert2)
+	centro1.repartirCertificacion(cert6)
+	
+	assert.that(centro1.esRobusto())
+	assert.that(martin.esCandidato(centro1))
+	assert.notThat(negocio1.esCandidato(centro1))
+
+
+}

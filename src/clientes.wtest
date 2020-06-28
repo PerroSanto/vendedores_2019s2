@@ -1,0 +1,33 @@
+import clientes.*
+import geografia.*
+import vendedores.*
+import centros.*
+
+
+test "test de clientes" {
+	const buenosAires = new Provincia(poblacion = 6000000)
+	const zarate = new Ciudad(provincia = buenosAires) 
+	const cert1 = new Certificaciones(puntos = 10, esCertificacionDeProductos = false)
+	const cert2 = new Certificaciones(puntos = 10, esCertificacionDeProductos = false)
+	const cert3 = new Certificaciones(puntos = 10, esCertificacionDeProductos = false)
+	const cert5 = new Certificaciones(puntos = 10)
+	const cert6 = new Certificaciones(puntos = 10)
+	const cert7 = new Certificaciones(puntos = 10)
+	const martin = new Viajante(certificaciones = [cert1,cert2,cert3,cert5,cert6,cert7],provinciasHabilitadas = [buenosAires])
+	const roberto = new Fijo(ciudadResidencia = zarate)
+	const negocio1 = new ComercioCorresponsal(ciudadSucursales = [zarate])
+	const inseguro1 = new Inseguro()
+	const detallista1 = new Detallista()
+	const humanista1 = new Humanista()
+	
+	//cliente inseguro
+	assert.that(inseguro1.puedeSerAtendido(martin))
+	assert.notThat(inseguro1.puedeSerAtendido(roberto))
+	//cliente detallista
+	assert.that(detallista1.puedeSerAtendido(martin))
+	assert.notThat(detallista1.puedeSerAtendido(roberto))
+	//cliente humanista
+	assert.that(humanista1.puedeSerAtendido(martin))
+	assert.notThat(humanista1.puedeSerAtendido(negocio1))
+
+}
